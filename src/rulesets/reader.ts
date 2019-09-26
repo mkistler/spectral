@@ -4,10 +4,9 @@ import { join } from '@stoplight/path';
 import { Optional } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
 import { JSONSchema7 } from 'json-schema';
-import { readFile, readParsable } from '../fs/reader';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { FileRulesetSeverity, IRuleset, RulesetFunctionCollection } from '../types/ruleset';
-import { findFile } from './finder';
+import { getRulesetFile, resolveFile } from './files';
 import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
 import { assertValidRuleset } from './validation';
 
@@ -45,7 +44,7 @@ const createRulesetProcessor = (
     uri: string,
     severity?: FileRulesetSeverity,
   ): Promise<IRuleset | null> {
-    const rulesetUri = await findFile(join(baseUri, '..'), uri);
+    const rulesetUri = await resolveFile(join(baseUri, '..'), uri);
     if (processedRulesets.has(rulesetUri)) {
       return null;
     }
@@ -53,7 +52,7 @@ const createRulesetProcessor = (
     processedRulesets.add(rulesetUri);
     const { result } = await httpAndFileResolver.resolve(
       parse(
-        await readParsable(rulesetUri, {
+        await getRulesetFile(join(baseUri, '..'), uri, {
           timeout: readOpts && readOpts.timeout,
           encoding: 'utf8',
         }),
@@ -125,7 +124,7 @@ const createRulesetProcessor = (
           try {
             resolvedFunctions[fnName] = {
               name: fnName,
-              code: await readFile(await findFile(rulesetFunctionsBaseDir, `./${fnName}.js`), {
+              code: await getRulesetFile(rulesetFunctionsBaseDir, `./${fnName}.js`, {
                 timeout: readOpts && readOpts.timeout,
                 encoding: 'utf8',
               }),
