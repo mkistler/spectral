@@ -41,7 +41,7 @@
     "generate-assets": "node ./scripts/generate-assets.js",
     "inline-version": "./scripts/inline-version.js",
     "lint.fix": "yarn lint --fix",
-    "lint": "tslint 'src/**/*.ts'",
+    "lint": "tsc --noEmit && tslint 'src/**/*.ts'",
     "postbuild.oas-functions": "copyfiles -u 1 \"dist/rulesets/oas*/functions/*.js\" ./",
     "postbuild": "yarn build.oas-functions && yarn generate-assets",
     "prebuild": "copyfiles -u 1 \"src/rulesets/oas*/**/*.json\" dist && copyfiles -u 1 \"src/rulesets/oas*/**/*.json\" ./",
@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "@stoplight/json": "^3.1.1",
-    "@stoplight/json-ref-resolver": "^2.3.0",
+    "@stoplight/json-ref-resolver": "^3.0.1",
     "@stoplight/path": "^1.2.0",
     "@stoplight/ref-resolvers": "^1.1.0",
     "@stoplight/types": "^11.0.0",
