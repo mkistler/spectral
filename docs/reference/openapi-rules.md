@@ -340,6 +340,28 @@ Operation tags should be defined in global tags.
 
 **Recommended:** Yes
 
+**Good Example**
+
+```yaml
+tags:
+  - name: 'Pets'
+paths:
+  /pets:
+    post:
+      tags:
+      - Pets
+```
+
+**Bad Example**
+
+```yaml
+paths:
+  /pets:
+    post:
+      tags:
+      - Pets
+```
+
 ### path-declarations-must-exist
 
 Path parameter declarations cannot be empty, ex.`/given/{}` is invalid.
