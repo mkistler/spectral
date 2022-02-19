@@ -23,6 +23,7 @@ import {
   oasDocumentSchema,
   oasOpSecurityDefined,
   oasSchema,
+  oasSecurityRequirement,
   oasDiscriminator,
 } from './functions';
 
@@ -459,6 +460,17 @@ const ruleset = {
         functionOptions: {
           schemesPath: ['securityDefinitions'],
         },
+      },
+    },
+    'oas2-security-requirement': {
+      description: 'Field value should be a list of Oauth2 scopes or empty list',
+      message: '{{error}}',
+      recommended: true,
+      formats: [oas2],
+      type: 'validation',
+      given: '$',
+      then: {
+        function: oasSecurityRequirement,
       },
     },
     'oas2-valid-schema-example': {
